@@ -1,0 +1,53 @@
+---
+title: Installation
+description: How to build and install Lux gRPC
+---
+
+# Installation
+
+## Requirements
+
+- C++17 compatible compiler
+- CMake 3.16+
+- Protocol Buffers 3.x
+- OpenSSL or BoringSSL
+
+## Building from Source
+
+```bash
+git clone https://github.com/luxcpp/grpc.git
+cd grpc
+git submodule update --init
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j$(nproc)
+```
+
+## CMake Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `gRPC_BUILD_TESTS` | OFF | Build tests |
+| `gRPC_BUILD_CODEGEN` | ON | Build protoc plugins |
+| `gRPC_BUILD_CSHARP_EXT` | OFF | Build C# extensions |
+| `gRPC_SSL_PROVIDER` | module | SSL library |
+
+## Installing
+
+```bash
+sudo make install
+```
+
+## Using with CMake
+
+```cmake
+find_package(gRPC CONFIG REQUIRED)
+target_link_libraries(myapp PRIVATE gRPC::grpc++)
+```
+
+## Proto Compilation
+
+```bash
+protoc --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` \
+       --cpp_out=. service.proto
+```

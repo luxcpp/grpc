@@ -1,0 +1,15 @@
+{
+  "title": "Lux gRPC Documentation",
+  "pages": [
+    "index",
+    "installation",
+    "---Core Concepts---",
+    "core/protocol",
+    "core/services",
+    "core/streaming",
+    "---Advanced---",
+    "advanced/compression",
+    "advanced/security",
+    "advanced/load-balancing"
+  ]
+}

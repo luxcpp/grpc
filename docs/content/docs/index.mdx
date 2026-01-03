@@ -1,0 +1,79 @@
+---
+title: Lux gRPC
+description: High-performance gRPC framework for Lux Network
+---
+
+# Lux gRPC
+
+High-performance gRPC framework optimized for Lux Network blockchain services.
+
+## Overview
+
+Lux gRPC is a customized build of Google's gRPC framework with optimizations for blockchain and distributed systems:
+
+- **Low-latency RPC** - Optimized for consensus messaging
+- **Bidirectional streaming** - Real-time block and transaction propagation
+- **Load balancing** - Built-in support for multi-node communication
+- **Compression** - zlib, gzip, and zstd compression support
+- **Security** - TLS with mTLS support
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Lux Node Services                         │
+│           Platform, X-Chain, C-Chain, D-Chain APIs           │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+┌─────────────────────────────┴───────────────────────────────┐
+│                   lux-grpc (this library)                    │
+│              Channels, Stubs, Codecs, TLS                    │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+        ┌─────────────────────┼─────────────────────────�
+        ▼                     ▼                     ▼
+    ┌───────┐           ┌──────────┐          ┌───────┐
+    │HTTP/2 │           │ Protocol │          │  TLS  │
+    │       │           │ Buffers  │          │       │
+    └───────┘           └──────────┘          └───────┘
+```
+
+## Quick Start
+
+```cpp
+#include <grpcpp/grpcpp.h>
+#include "lux/node.grpc.pb.h"
+
+// Create channel
+auto channel = grpc::CreateChannel(
+    "localhost:9650",
+    grpc::InsecureChannelCredentials()
+);
+
+// Create stub
+auto stub = lux::PlatformService::NewStub(channel);
+
+// Make RPC call
+grpc::ClientContext context;
+lux::GetHeightRequest request;
+lux::GetHeightResponse response;
+grpc::Status status = stub->GetHeight(&context, request, &response);
+```
+
+## Features
+
+- Protocol Buffers 3 code generation
+- Async and sync API
+- Deadline/timeout support
+- Metadata/header propagation
+- Interceptors for logging/auth
+
+## License
+
+BSD 3-Clause Ecosystem License - This software may be used freely for non-commercial purposes or on the Lux Network (mainnet, testnets, and descendant chains).
+
+## Links
+
+- [Installation Guide](/grpc/docs/installation)
+- [Protocol Reference](/grpc/docs/core/protocol)
+- [GitHub Repository](https://github.com/luxcpp/grpc)
